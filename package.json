@@ -1,5 +1,5 @@
 {
-  "name": "pm2-server-monitor-single",
+  "name": "@ashinga48/pm2-server-monitor-single",
   "version": "1.0.0",
   "description": "this is a fork of https://github.com/eshengsky/pm2-server-monitor.git",
   "main": "lib/index.js",
