@@ -268,3 +268,14 @@ table td {
 .red {
     color: red;
 }
+
+a, a:visited {
+    color: white;
+    display: inline-block;
+    margin: 5px;
+}
+
+.actionItem {
+    display: inline-block;
+    clear: both;
+}
