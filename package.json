@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ashinga48/pm2-server-monito"
+    "url": "git+https://github.com/ashinga48/pm2-server-monitor-single"
   },
   "author": "eshengsky@163.com",
   "license": "MIT",
