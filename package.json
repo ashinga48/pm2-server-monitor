@@ -1,14 +1,14 @@
 {
-  "name": "pm2-server-monitor",
+  "name": "pm2-server-monitor-single",
   "version": "1.0.0",
-  "description": "",
+  "description": "this is a fork of https://github.com/eshengsky/pm2-server-monitor.git",
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eshengsky/pm2-server-monitor.git"
+    "url": "git+https://github.com/ashinga48/pm2-server-monito"
   },
   "author": "eshengsky@163.com",
   "license": "MIT",
