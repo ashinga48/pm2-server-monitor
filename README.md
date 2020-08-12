@@ -3,7 +3,7 @@
 The monitor for pm2 servers, with nice web UI.
 
 ## Preview
-![image](https://raw.githubusercontent.com/eshengsky/pm2-server-monitor/master/preview.png)
+![image](https://raw.githubusercontent.com/ashinga48/pm2-server-monitor-single/master/sample.png)
 
 ## Usage
 
