@@ -15,7 +15,11 @@
   "bugs": {
     "url": "https://github.com/eshengsky/pm2-server-monitor/issues"
   },
-  "homepage": "https://github.com/eshengsky/pm2-server-monitor#readme",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/ashinga48/pm2-server-monitor-single#readme",
   "dependencies": {
     "os-utils": "0.0.14",
     "pm2": "^3.2.2",
