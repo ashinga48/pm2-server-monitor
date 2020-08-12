@@ -88,12 +88,51 @@ const app = new Vue({
             }
             const ips = this.servers[this.currentProject];
             ips.forEach(item => {
-                const socket = io(`ws://${item.ip}:${item.port + 3000}?interval=${this.interval}`, {
-                    transports: ['websocket']
+                // const socket = io(`http://${item.ip}:${item.port + 3000}?interval=${this.interval}`, {
+                //     transports: ['websocket']
+                // });
+                // const socket = io(`http://${item.ip}:${item.port}?interval=${this.interval}`, {
+                //     // transports: ['websocket']
+                // });
+                console.log(item);
+                const socket = io(`http://${item.ip}?interval=${this.interval}`, {
+                    // transports: ['websocket']
                 });
                 this.socketQueue.push(socket);
                 const statsEl = document.getElementById(`ip${item.ip}:${item.port}`);
+                
+                // Global events are bound against socket
+                socket.on('connect_failed', function(e){
+                    console.log('Connection Failed',e);
+                });
+                socket.on('connect', function(e){
+                    console.log('Connected',e);
+                });
+                socket.on('disconnect', function (e) {
+                    console.log('Disconnected',e);
+                });
+                socket.on('error', function(e) {
+                
+                    console.log('error socket', e);
+                });
+
+                const onAction = function(type, appName ) {
+                    socket.emit(type+'App', appName);
+                }
+
+                const createActionItem = function(onClick, appName, type){
+                    const actionBtn = document.createElement('input');
+                    actionBtn.value = type;
+                    actionBtn.type = "button";
+                    actionBtn.className = "action";
+                    actionBtn.onclick = function(){
+                        onClick(type, appName)
+                    };
+                    return actionBtn;
+                }
+
                 socket.on('stats', data => {
+                    // console.log(data);
                     // stats-panel-title
                     statsEl.querySelector('.hostname').textContent = this.getPathValue(data, 'totalData.hostname', 'host');
                     statsEl.querySelector('.cpus').textContent = this.getPathValue(data, 'totalData.cpus', '0');
@@ -125,29 +164,61 @@ const app = new Vue({
                     statsEl.querySelector('.memory').textContent = this.getPathValue(data, 'totalData.memory', '0B');
                     statsEl.querySelector('.restart').textContent = this.getPathValue(data, 'totalData.restart', '0');
                     statsEl.querySelector('.runtime').textContent = this.getPathValue(data, 'totalData.totalUptime', '0s');
+                    
+                    statsEl.querySelector('.stats-panel-list tbody').innerHTML = '';
+
+                    const processList = [];
 
                     // stats-panel-list
                     let html = '';
                     if (data.processData && data.processData.length > 0) {
-                        data.processData.forEach(item => {
+                        data.processData.forEach((item, itemIndx) => {
                             const cpuCls = this.getPathValue(item, 'cpuCls');
+
+                            // if(processList.indexOf(item.name) < 0)
+                            processList.push(item.name)
+
                             html += `
-                        <tr>
-                            <td>${item.name}</td>
-                            <td>${item.pmid}</td>
-                            <td>${item.mode}</td>
-                            <td>${item.pid}</td>
-                            <td class="${item.status}">${item.status}</td>
-                            <td>${item.restart}</td>
-                            <td>${item.uptime}</td>
-                            <td class="${cpuCls}">${item.cpu}</td>
-                            <td>${item.memory}</td>
-                            <td>${item.user}</td>
-                        </tr>
-                        `;
+                                <tr id="appIndx${itemIndx}">
+                                <td>${item.name}</td>
+                                <td>${item.pmid}</td>
+                                <td>${item.mode}</td>
+                                <td>${item.pid}</td>
+                                <td class="${item.status}">${item.status}</td>
+                                <td>${item.restart}</td>
+                                <td>${item.uptime}</td>
+                                <td class="${cpuCls}">${item.cpu}</td>
+                                <td>${item.memory}</td>
+                                <td>${item.user}</td>
+                                <td>
+                                    <div class="actions"></div>
+                                </td>
+                                </tr>
+                            `;
+
+                            // var trRow = document.createElement('tr');
+                            // trRow.innerHTML = html;
+                            // trRow.id = "appIndx"+itemIndx;
+
+                            
+                            // trRow.innerHTML = html;
+                            // statsEl.querySelector('.stats-panel-list tbody').appendChild(trRow);
                         });
                     }
                     statsEl.querySelector('.stats-panel-list tbody').innerHTML = html;
+
+                    processList.forEach((itemName, indx) => {
+                        statsEl.querySelector('.stats-panel-list tbody #appIndx'+indx+' .actions')
+                        .appendChild(createActionItem(onAction, itemName, "start"));
+                        statsEl.querySelector('.stats-panel-list tbody #appIndx'+indx+' .actions')
+                        .appendChild(createActionItem(onAction, itemName, "delete"));
+                        statsEl.querySelector('.stats-panel-list tbody #appIndx'+indx+' .actions')
+                        .appendChild(createActionItem(onAction, itemName, "restart"));
+                        statsEl.querySelector('.stats-panel-list tbody #appIndx'+indx+' .actions')
+                        .appendChild(createActionItem(onAction, itemName, "stop"));
+                    })
+                    
+
                 });
             });
         }
