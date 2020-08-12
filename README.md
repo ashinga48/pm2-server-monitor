@@ -1,6 +1,8 @@
 # pm2-server-monitor
 
-The monitor for pm2 servers, with nice web UI.
+This is a clone of https://github.com/eshengsky/pm2-server-monitor
+
+This is modified as single server instance to run inside docker container
 
 ## Preview
 ![image](https://raw.githubusercontent.com/ashinga48/pm2-server-monitor-single/master/sample.png)
